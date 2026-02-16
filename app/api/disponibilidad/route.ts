@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSheet } from '@/lib/googleSheets';
+import { getSheet } from '@/lib/googlesheets';
 
 export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
