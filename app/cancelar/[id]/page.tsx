@@ -3,8 +3,8 @@
 import { useState, useEffect, use } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { ShieldAlert, CheckCircle } from 'lucide-react';
-import { WHATSAPP_NUMBER_CLUB } from '@/constants/club';
-import { WHATSAPP_NUMBER } from '@/constants/barberia';
+import { WHATSAPP_NUMBER_CLUB } from '../../../constants/club';
+import { WHATSAPP_NUMBER } from '../../../constants/barberia';
 
 export default function CancelarPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params);
