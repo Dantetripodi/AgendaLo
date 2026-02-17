@@ -21,6 +21,26 @@ export default function AdminPage() {
     const [business, setBusiness] = useState<'Barberia' | 'Club'>('Barberia');
     const [reservas, setReservas] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState(false);
+
+    useEffect(() => {
+        const auth = sessionStorage.getItem('admin_auth');
+        if (auth === 'true') setIsAuthenticated(true);
+    }, []);
+
+    const handleLogin = (e: React.FormEvent) => {
+        e.preventDefault();
+        // Contraseña por defecto: admin123
+        if (password === 'admin123') {
+            setIsAuthenticated(true);
+            sessionStorage.setItem('admin_auth', 'true');
+            setError(false);
+        } else {
+            setError(true);
+        }
+    };
 
     const fetchReservas = async () => {
         setLoading(true);
@@ -90,6 +110,43 @@ export default function AdminPage() {
         window.open(`https://wa.me/${res.telefono.replace(/\D/g, '')}?text=${message}`, '_blank');
     };
 
+    if (!isAuthenticated) {
+        return (
+            <main className="min-h-screen flex items-center justify-center p-6 bg-[#1a1811]">
+                <div className="max-w-md w-full glass p-10 rounded-[2.5rem] border border-neutral-800 shadow-2xl space-y-8 animate-in fade-in zoom-in duration-500">
+                    <div className="text-center space-y-2">
+                        <div className="bg-accent/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 border border-accent/20">
+                            <ShieldCheck className="text-accent" size={32} />
+                        </div>
+                        <h1 className="text-3xl font-black uppercase tracking-tighter">Elite <span className="text-accent">Admin</span></h1>
+                        <p className="text-neutral-500 text-xs font-bold uppercase tracking-widest">Centro de Control Requerido</p>
+                    </div>
+
+                    <form onSubmit={handleLogin} className="space-y-4">
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500 ml-1">Contraseña Máster</label>
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className={`w-full bg-neutral-900 border ${error ? 'border-red-500/50' : 'border-neutral-800'} rounded-2xl p-4 outline-none focus:border-accent/50 transition-all text-center tracking-widest font-bold`}
+                                placeholder="••••••••"
+                                autoFocus
+                            />
+                            {error && <p className="text-red-500 text-[10px] font-black uppercase text-center mt-2 animate-bounce">Contraseña Incorrecta</p>}
+                        </div>
+                        <button
+                            type="submit"
+                            className="w-full bg-accent text-dark-bg font-black py-4 rounded-2xl hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-accent/20 uppercase tracking-widest text-xs"
+                        >
+                            Ingresar al Sistema
+                        </button>
+                    </form>
+                </div>
+            </main>
+        );
+    }
+
     return (
         <main className="max-w-7xl mx-auto px-4 py-8 md:p-12 space-y-12">
             {/* Header PRO */}
@@ -105,21 +162,32 @@ export default function AdminPage() {
                     <p className="text-neutral-500 text-sm font-medium">Control total de tu negocio en tiempo real</p>
                 </div>
 
-                <div className="flex bg-neutral-900 p-1.5 rounded-2xl border border-neutral-800 shadow-2xl">
+                <div className="flex flex-col md:flex-row gap-4">
                     <button
-                        onClick={() => setBusiness('Barberia')}
-                        className={`px-8 py-3 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${business === 'Barberia' ? 'bg-accent text-dark-bg shadow-lg shadow-accent/20' : 'text-neutral-500 hover:text-neutral-300'
-                            }`}
+                        onClick={() => {
+                            sessionStorage.removeItem('admin_auth');
+                            setIsAuthenticated(false);
+                        }}
+                        className="px-4 py-2 border border-neutral-800 rounded-xl text-[10px] font-black text-neutral-500 hover:text-red-500 hover:border-red-500/30 transition-all uppercase tracking-widest bg-neutral-900/50"
                     >
-                        BARBERÍA
+                        Cerrar Sesión
                     </button>
-                    <button
-                        onClick={() => setBusiness('Club')}
-                        className={`px-8 py-3 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${business === 'Club' ? 'bg-accent text-dark-bg shadow-lg shadow-accent/20' : 'text-neutral-500 hover:text-neutral-300'
-                            }`}
-                    >
-                        CLUB
-                    </button>
+                    <div className="flex bg-neutral-900 p-1.5 rounded-2xl border border-neutral-800 shadow-2xl">
+                        <button
+                            onClick={() => setBusiness('Barberia')}
+                            className={`px-8 py-3 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${business === 'Barberia' ? 'bg-accent text-dark-bg shadow-lg shadow-accent/20' : 'text-neutral-500 hover:text-neutral-300'
+                                }`}
+                        >
+                            BARBERÍA
+                        </button>
+                        <button
+                            onClick={() => setBusiness('Club')}
+                            className={`px-8 py-3 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${business === 'Club' ? 'bg-accent text-dark-bg shadow-lg shadow-accent/20' : 'text-neutral-500 hover:text-neutral-300'
+                                }`}
+                        >
+                            CLUB
+                        </button>
+                    </div>
                 </div>
             </header>
 
@@ -275,8 +343,9 @@ export default function AdminPage() {
 
             {/* Footer Info */}
             <footer className="text-center pb-12">
-                <p className="text-neutral-700 text-[9px] font-black uppercase tracking-[0.4em]">Elite Control Center • v3.0 Early Access</p>
+                <p className="text-neutral-700 text-[9px] font-black uppercase tracking-[0.4em]">Elite Control Center • v4.0 Secure Access</p>
             </footer>
         </main>
     );
 }
+
