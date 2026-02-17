@@ -45,7 +45,7 @@ export default function Home() {
                 <Link href="/admin" className="text-[10px] font-bold uppercase tracking-[0.2em] hover:text-accent transition-colors">
                     ⚙️ Acceso Administración
                 </Link>
-                <span className="text-[8px] opacity-30">v1.5.0-stable</span>
+                <span className="text-[8px] opacity-30">v2.0.0-final</span>
             </footer>
         </main>
     );
