@@ -41,10 +41,11 @@ export default function Home() {
                 </Link>
             </div>
 
-            <footer className="fixed bottom-8 text-neutral-600">
+            <footer className="fixed bottom-8 text-neutral-600 flex flex-col items-center gap-2">
                 <Link href="/admin" className="text-[10px] font-bold uppercase tracking-[0.2em] hover:text-accent transition-colors">
                     ⚙️ Acceso Administración
                 </Link>
+                <span className="text-[8px] opacity-30">v1.5.0-stable</span>
             </footer>
         </main>
     );
