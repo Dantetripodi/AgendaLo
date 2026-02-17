@@ -43,6 +43,9 @@ export async function POST(request: NextRequest) {
 
         const id = crypto.randomUUID();
 
+        const now = new Date();
+        const fechaRegistro = format(now, 'dd/MM/yyyy HH:mm:ss');
+
         await sheet.addRow({
             ID: id,
             Cliente: cliente,
@@ -53,7 +56,8 @@ export async function POST(request: NextRequest) {
             Recurso: recurso,
             'Precio Total': precioTotal,
             'Monto Seña': montoSena,
-            Estado: estado
+            Estado: estado,
+            'Fecha Registro': fechaRegistro
         });
 
         return NextResponse.json({ success: true, id });

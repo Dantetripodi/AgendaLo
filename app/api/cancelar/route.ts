@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSheet } from '@/lib/googlesheets';
+import { format } from 'date-fns';
 
 export async function POST(request: NextRequest) {
     try {
@@ -18,7 +19,9 @@ export async function POST(request: NextRequest) {
         }
 
         // Cambiamos el estado a Cancelado para liberar el slot y mantener registro
+        const now = new Date();
         row.set('Estado', 'Cancelado');
+        row.set('Fecha Cancelación', format(now, 'dd/MM/yyyy HH:mm:ss'));
         await row.save();
 
         return NextResponse.json({
