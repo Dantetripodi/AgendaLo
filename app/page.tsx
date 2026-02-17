@@ -1,4 +1,5 @@
 'use client';
+// Version: 1.0.1 - Security Patched
 
 import Link from 'next/link';
 
