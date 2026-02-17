@@ -58,7 +58,10 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({ success: true, id });
     } catch (error: any) {
-        console.error('Error in reservation:', error.message);
-        return NextResponse.json({ error: 'Error al procesar la reserva' }, { status: 500 });
+        console.error('Error in reservation:', error);
+        return NextResponse.json({
+            error: 'Error al procesar la reserva',
+            details: error.message
+        }, { status: 500 });
     }
 }

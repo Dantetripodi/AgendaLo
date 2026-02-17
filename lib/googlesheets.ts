@@ -9,16 +9,26 @@ const SCOPES = [
 let jwt: any;
 
 const initJwt = () => {
-  if (!process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || !process.env.GOOGLE_PRIVATE_KEY || !process.env.GOOGLE_SHEET_ID) {
-    throw new Error('Missing Google Sheets environment variables');
+  const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+  const key = process.env.GOOGLE_PRIVATE_KEY;
+  const sheetId = process.env.GOOGLE_SHEET_ID;
+
+  if (!email || !key || !sheetId) {
+    console.error('Environment variables missing:', { email: !!email, key: !!key, sheetId: !!sheetId });
+    throw new Error('Missing Google Sheets environment variables. Check Vercel project settings.');
   }
 
   if (!jwt) {
-    jwt = new JWT({
-      email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-      scopes: SCOPES,
-    });
+    try {
+      jwt = new JWT({
+        email: email,
+        key: key.replace(/\\n/g, '\n'),
+        scopes: SCOPES,
+      });
+    } catch (err) {
+      console.error('Error creating JWT:', err);
+      throw err;
+    }
   }
   return jwt;
 };

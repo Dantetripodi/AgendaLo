@@ -25,7 +25,10 @@ export async function GET(request: NextRequest) {
 
         return NextResponse.json({ ocupadas });
     } catch (error: any) {
-        console.error('Error fetching availability:', error.message);
-        return NextResponse.json({ error: 'Error al obtener disponibilidad' }, { status: 500 });
+        console.error('Error fetching availability:', error);
+        return NextResponse.json({
+            error: 'Error al obtener disponibilidad',
+            details: error.message
+        }, { status: 500 });
     }
 }
