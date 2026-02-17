@@ -22,7 +22,7 @@ const initJwt = () => {
     try {
       jwt = new JWT({
         email: email,
-        key: key.replace(/\\n/g, '\n'),
+        key: key.trim().replace(/\\n/g, '\n').replace(/^"(.*)"$/, '$1'),
         scopes: SCOPES,
       });
     } catch (err) {
